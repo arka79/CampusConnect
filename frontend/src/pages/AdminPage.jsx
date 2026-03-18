@@ -10,11 +10,11 @@ const TABS = [
   { id: 'announce', label: 'Announcements', icon: Bell },
 ]
 
-function StatBox({ label, value, color }) {
+function StatBox({ label, value, color, onClick }) {
   return (
-    <div className="card" style={{ textAlign: 'center' }}>
-      <div style={{ fontSize: 32, fontWeight: 700, color: color || 'var(--navy)', fontFamily: 'DM Sans' }}>{value ?? '—'}</div>
-      <div style={{ fontSize: 12, color: 'var(--gray-500)', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500 }}>{label}</div>
+    <div className="card stat-box" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
+      <div className="stat-box-value" style={{ color: color || 'var(--navy)' }}>{value ?? '—'}</div>
+      <div className="stat-box-label">{label}</div>
     </div>
   )
 }
@@ -25,6 +25,7 @@ export default function AdminPage() {
   const [pendingFiles, setPendingFiles] = useState([])
   const [users, setUsers] = useState([])
   const [announcements, setAnnouncements] = useState([])
+  const [statsLoading, setStatsLoading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [userSearch, setUserSearch] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
@@ -37,8 +38,33 @@ export default function AdminPage() {
   useEffect(() => { if (tab === 'users') loadUsers() }, [tab, userSearch, roleFilter])
   useEffect(() => { if (tab === 'announce') loadAnnouncements() }, [tab])
 
-  const loadStats = async () => {
-    try { const r = await api.get('/admin/stats'); setStats(r.data) } catch {}
+  const [statsError, setStatsError] = useState(null)
+
+  const sleep = (ms) => new Promise(res => setTimeout(res, ms))
+
+  const loadStats = async (attempts = 3) => {
+    setStatsLoading(true)
+    setStatsError(null)
+    for (let i = 1; i <= attempts; i++) {
+      try {
+        const r = await api.get('/admin/stats')
+        setStats(r.data)
+        setStatsError(null)
+        setStatsLoading(false)
+        return
+      } catch (err) {
+        const msg = err.response?.data?.message || err.message || 'Failed to fetch'
+        console.warn(`loadStats attempt ${i} failed:`, msg)
+        if (i === attempts) {
+          setStats(null)
+          setStatsError(msg)
+          setStatsLoading(false)
+          return
+        }
+        // exponential backoff before retrying
+        await sleep(300 * i)
+      }
+    }
   }
   const loadPending = async () => {
     setLoading(true)
@@ -122,16 +148,37 @@ export default function AdminPage() {
       </div>
 
       {/* Overview */}
-      {tab === 'stats' && stats && (
+      {tab === 'stats' && (
         <div>
-          <div className="grid-4" style={{ marginBottom: 24 }}>
-            <StatBox label="Total Users" value={stats.users} color="var(--navy)" />
-            <StatBox label="Approved Files" value={stats.files} color="var(--blue)" />
-            <StatBox label="Pending Files" value={stats.pending} color="var(--red)" />
-            <StatBox label="Study Groups" value={stats.groups} color="var(--gold)" />
-            <StatBox label="Total Messages" value={stats.messages} color="#8B4A9C" />
-            <StatBox label="Total Downloads" value={stats.downloads} color="var(--green)" />
-          </div>
+          {statsLoading ? (
+            <div className="stats-grid" style={{ marginBottom: 24 }}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="stat-box">
+                  <div className="stat-box-value skeleton" style={{ width: 90, height: 30 }} />
+                  <div className="stat-box-label skeleton" style={{ width: 110, height: 12, marginTop: 8 }} />
+                </div>
+              ))}
+            </div>
+          ) : stats ? (
+            <div className="stats-grid" style={{ marginBottom: 24 }}>
+              <StatBox label="Total Users" value={stats.users} color="var(--navy)" onClick={() => setTab('users')} />
+              <StatBox label="Approved Files" value={stats.files} color="var(--blue)" onClick={() => setTab('files')} />
+              <StatBox label="Pending Files" value={stats.pending} color="var(--red)" onClick={() => setTab('files')} />
+              <StatBox label="Study Groups" value={stats.groups} color="var(--gold)" onClick={() => setTab('users')} />
+              <StatBox label="Total Messages" value={stats.messages} color="#8B4A9C" onClick={() => setTab('announce')} />
+              <StatBox label="Total Downloads" value={stats.downloads} color="var(--green)" onClick={() => setTab('files')} />
+            </div>
+          ) : (
+            <div className="card" style={{ padding: 18, textAlign: 'center' }}>
+              <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>No overview data</div>
+              <div style={{ color: 'var(--gray-500)', marginBottom: 12 }}>We couldn't fetch admin statistics right now.</div>
+              {statsError && <div style={{ color: 'var(--red)', marginBottom: 10, fontSize: 13 }}>{statsError}</div>}
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
+                <button className="btn btn-outline" onClick={() => loadStats(3)}>Retry</button>
+                <button className="btn btn-primary" onClick={() => { loadStats(1); setTab('files') }}>Try files tab</button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
