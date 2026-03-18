@@ -30,6 +30,21 @@ export const AuthProvider = ({ children }) => {
 
   const login = useCallback(async (email, password) => {
     const res = await api.post('/auth/login', { email, password });
+    // If the server requires OTP, it will respond with { otpRequired: true, loginId }
+    if (res.data && res.data.otpRequired) {
+      return res.data;
+    }
+    const { token, user } = res.data;
+    localStorage.setItem(tokenKey(tabId), token);
+    localStorage.setItem(userKey(tabId), JSON.stringify(user));
+    setUser(user);
+    connectSocket(token);
+    return user;
+  }, []);
+
+  const verifyOtp = useCallback(async (loginId, code) => {
+    // send generic id and code; caller may pass purpose via third arg in future
+    const res = await api.post('/auth/verify-otp', { id: loginId, code });
     const { token, user } = res.data;
     localStorage.setItem(tokenKey(tabId), token);
     localStorage.setItem(userKey(tabId), JSON.stringify(user));
@@ -40,6 +55,8 @@ export const AuthProvider = ({ children }) => {
 
   const register = useCallback(async (data) => {
     const res = await api.post('/auth/register', data);
+    // If the server requires OTP verification for registration it will return { otpRequired: true, registerId }
+    if (res.data && res.data.otpRequired) return res.data;
     const { token, user } = res.data;
     localStorage.setItem(tokenKey(tabId), token);
     localStorage.setItem(userKey(tabId), JSON.stringify(user));
@@ -62,7 +79,7 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, login, verifyOtp, register, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

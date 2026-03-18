@@ -47,7 +47,7 @@ export default function Dashboard() {
   return (
     <div>
       {/* Header */}
-      <div style={{ marginBottom: 28 }}>
+      <div className="page-hero">
         <h1 className="page-title">{greeting}, {user?.name?.split(' ')[0]} 👋</h1>
         <p className="page-subtitle">{user?.department} · {user?.year} · Adamas University</p>
       </div>
@@ -82,7 +82,7 @@ export default function Dashboard() {
               View all <ArrowRight size={14} />
             </button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div className="recent-list">
             {loading ? [1,2,3].map(i => (
               <div key={i} style={{ height: 76, background: '#fff', borderRadius: 'var(--radius-lg)', border: '1px solid var(--gray-100)', animation: 'pulse 1.5s infinite' }} />
             )) : recentFiles.length === 0 ? (
@@ -101,7 +101,7 @@ export default function Dashboard() {
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--gray-900)' }} className="truncate">{f.title}</div>
-                  <div style={{ fontSize: 12, color: 'var(--gray-500)', marginTop: 2 }}>
+                  <div className="file-meta">
                     {f.department} · {f.year} · by {f.uploader_name}
                   </div>
                 </div>
@@ -149,15 +149,7 @@ export default function Dashboard() {
                 { label: 'Join a Study Group', path: '/groups', color: 'var(--gold)' },
                 { label: 'Open Campus Chat', path: '/chat', color: 'var(--green)' },
               ].map(q => (
-                <button key={q.path} onClick={() => navigate(q.path)}
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '12px 14px', background: '#fff', border: '1px solid var(--gray-100)',
-                    borderRadius: 'var(--radius)', cursor: 'pointer', fontSize: 14, fontWeight: 500,
-                    color: q.color, transition: 'all 0.15s'
-                  }}
-                  onMouseOver={e => e.currentTarget.style.boxShadow = 'var(--shadow-sm)'}
-                  onMouseOut={e => e.currentTarget.style.boxShadow = 'none'}>
+                <button key={q.path} onClick={() => navigate(q.path)} className="quick-link-btn" style={{ color: q.color }}>
                   {q.label} <ArrowRight size={14} />
                 </button>
               ))}

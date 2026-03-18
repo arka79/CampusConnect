@@ -157,13 +157,7 @@ export default function ChatPage() {
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--gray-400)', textTransform: 'uppercase', marginBottom: 8 }}>Channels</div>
             <button
               onClick={() => setActiveRoom('global')}
-              style={{
-                width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px',
-                borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer', fontSize: 14,
-                background: activeRoom === 'global' ? 'var(--navy)' : 'transparent',
-                color: activeRoom === 'global' ? '#fff' : 'var(--gray-700)',
-                transition: 'all 0.15s', fontWeight: 500
-              }}>
+              className={`channel-btn ${activeRoom === 'global' ? 'active' : ''}`}>
               <Hash size={15} /> Campus Global
             </button>
           </div>
@@ -173,14 +167,7 @@ export default function ChatPage() {
               <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--gray-400)', textTransform: 'uppercase', marginBottom: 8 }}>My Groups</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {myGroups.map(g => (
-                  <button key={g.id} onClick={() => setActiveRoom(g.id)}
-                    style={{
-                      width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px',
-                      borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer', fontSize: 14,
-                      background: activeRoom === g.id ? 'var(--navy)' : 'transparent',
-                      color: activeRoom === g.id ? '#fff' : 'var(--gray-700)',
-                      transition: 'all 0.15s', fontWeight: 400
-                    }}>
+                  <button key={g.id} onClick={() => setActiveRoom(g.id)} className={`channel-btn ${activeRoom === g.id ? 'active' : ''}`}>
                     <div style={{ width: 20, height: 20, borderRadius: 4, background: g.avatar_color, flexShrink: 0 }} />
                     <span className="truncate" style={{ textAlign: 'left' }}>{g.name}</span>
                   </button>
@@ -196,7 +183,7 @@ export default function ChatPage() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, overflowY: 'auto' }}>
               {onlineUsers.slice(0, 15).map(u => (
-                <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div key={u.id} className="online-user-row">
                   <div style={{ position: 'relative' }}>
                     <div className="avatar sm">{getInitials(u.name)}</div>
                     <div style={{ position: 'absolute', bottom: 0, right: 0, width: 7, height: 7, background: 'var(--green)', borderRadius: '50%', border: '1.5px solid #fff' }} />

@@ -35,15 +35,15 @@ export default function ProfilePage() {
 
       <div className="card" style={{ marginBottom: 20 }}>
         {/* Avatar header */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20, padding: '4px 0 20px', borderBottom: '1px solid var(--gray-100)', marginBottom: 20 }}>
+        <div className="profile-header">
           <div className="avatar lg" style={{ width: 64, height: 64, fontSize: 20 }}>
             {user?.avatar_url
               ? <img src={user.avatar_url} alt="" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
               : getInitials(user?.name)}
           </div>
           <div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--navy)', fontFamily: 'Playfair Display' }}>{user?.name}</div>
-            <div style={{ fontSize: 14, color: 'var(--gray-500)' }}>{user?.email}</div>
+            <div className="profile-name">{user?.name}</div>
+            <div className="profile-email">{user?.email}</div>
             <span className="badge badge-gold" style={{ marginTop: 6, textTransform: 'capitalize' }}>{user?.role}</span>
           </div>
         </div>

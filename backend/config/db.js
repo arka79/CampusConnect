@@ -28,6 +28,7 @@ const initDB = async () => {
         year VARCHAR(20),
         avatar_url TEXT,
         is_active TINYINT(1) DEFAULT 1,
+        is_verified TINYINT(1) DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -111,6 +112,12 @@ const initDB = async () => {
     `);
 
     console.log('✅ Database tables initialized');
+    // Ensure legacy databases get an is_verified column
+    try {
+      await conn.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_verified TINYINT(1) DEFAULT 0;");
+    } catch (e) {
+      // ignore if not supported
+    }
   } finally {
     conn.release();
   }
