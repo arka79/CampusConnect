@@ -83,33 +83,64 @@ export default function Dashboard() {
             </button>
           </div>
           <div className="recent-list">
-            {loading ? [1,2,3].map(i => (
-              <div key={i} style={{ height: 76, background: '#fff', borderRadius: 'var(--radius-lg)', border: '1px solid var(--gray-100)', animation: 'pulse 1.5s infinite' }} />
-            )) : recentFiles.length === 0 ? (
-              <div className="empty-state">
-                <FileText size={40} className="empty-icon" />
-                <div className="empty-title">No files yet</div>
-                <div className="empty-text">Be the first to upload study materials!</div>
-              </div>
-            ) : recentFiles.map(f => (
-              <div key={f.id} className="file-card">
-                <div className="file-type-icon" style={{
-                  background: f.file_type === 'paper' ? 'rgba(192,57,43,0.1)' : 'rgba(26,95,168,0.1)',
-                  color: f.file_type === 'paper' ? 'var(--red)' : 'var(--blue)'
-                }}>
-                  {f.file_type === 'paper' ? 'EX' : 'NT'}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--gray-900)' }} className="truncate">{f.title}</div>
-                  <div className="file-meta">
-                    {f.department} · {f.year} · by {f.uploader_name}
+            {loading ? (
+              <div style={{ display: 'grid', gap: 12 }}>
+                {[1,2,3].map(i => (
+                  <div key={i} className="file-card" style={{ height: 84, alignItems: 'center' }}>
+                    <div className="file-thumb skeleton" style={{ width: 64, height: 64, borderRadius: 10 }} />
+                    <div style={{ flex: 1 }}>
+                      <div className="skeleton" style={{ height: 14, width: '60%', borderRadius: 6 }} />
+                      <div className="skeleton" style={{ height: 12, width: '40%', marginTop: 8, borderRadius: 6 }} />
+                    </div>
+                    <div style={{ width: 70 }}>
+                      <div className="skeleton" style={{ height: 12, width: 40, borderRadius: 6, marginLeft: 'auto' }} />
+                    </div>
                   </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--gray-400)', flexShrink: 0 }}>
-                  <Download size={12} /> {f.download_count}
+                ))}
+              </div>
+            ) : recentFiles.length === 0 ? (
+              <div className="empty-state card">
+                <FileText size={48} className="empty-icon" />
+                <div className="empty-title">No files yet</div>
+                <div className="empty-text">Upload your study materials and they'll appear here for quick access.</div>
+                <div style={{ marginTop: 12 }}>
+                  <button className="btn btn-primary" onClick={() => navigate('/files')}>Upload Material</button>
                 </div>
               </div>
-            ))}
+            ) : (
+              <div style={{ display: 'grid', gap: 12 }}>
+                {recentFiles.map(f => (
+                  <div key={f.id} className="file-card">
+                    <div className="file-thumb" style={{
+                      background: f.file_type === 'paper' ? 'linear-gradient(135deg, rgba(192,57,43,0.12), rgba(192,57,43,0.04))' : 'linear-gradient(135deg, rgba(26,95,168,0.12), rgba(26,95,168,0.04))'
+                    }}>
+                      <div style={{ fontSize: 12, fontWeight: 800, color: f.file_type === 'paper' ? 'var(--red)' : 'var(--blue)' }}>{f.file_type === 'paper' ? 'EX' : 'NT'}</div>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--gray-900)' }} className="truncate">{f.title}</div>
+                      <div className="file-meta" style={{ marginTop: 6 }}>
+                        <span style={{ color: 'var(--gray-500)' }}>{f.department}</span>
+                        <span style={{ margin: '0 6px', color: 'var(--gray-300)' }}>·</span>
+                        <span style={{ color: 'var(--gray-500)' }}>{f.year}</span>
+                        <span style={{ margin: '0 6px', color: 'var(--gray-300)' }}>·</span>
+                        <span style={{ color: 'var(--gray-500)' }}>by {f.uploader_name}</span>
+                      </div>
+                      {f.tags && f.tags.length > 0 && (
+                        <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                          {f.tags.slice(0,3).map(t => <span key={t} className="badge badge-gray">{t}</span>)}
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, minWidth: 90 }}>
+                      <div style={{ color: 'var(--gray-400)', fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <Download size={12} /> <span>{f.download_count}</span>
+                      </div>
+                      <button className="btn btn-ghost btn-sm" onClick={() => navigate('/files')}>View</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

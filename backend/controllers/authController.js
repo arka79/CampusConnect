@@ -175,20 +175,21 @@ const login = async (req, res) => {
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
-
-    // Instead of issuing token directly, generate an OTP for additional verification
-    // Create OTP record and return a login flow id to the client
-    const { id: loginId, otp } = await createOtp(user.id, 'login', 5);
-
-    // Attempt to send OTP to user's email; fallback to console
-    try {
-      await sendOtpEmail(user.email, otp, { ttl: 5 });
-    } catch (e) {
-      console.error('Error sending OTP email', e);
-    }
-
-    // Return response indicating OTP step is required
-    res.json({ otpRequired: true, loginId, message: 'OTP sent to registered email' });
+    // Issue JWT directly (no OTP step)
+    const token = generateToken(user.id);
+    // Return sanitized user object (omit password)
+    const safeUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      department: user.department,
+      year: user.year,
+      avatar_url: user.avatar_url,
+      is_active: user.is_active,
+      is_verified: user.is_verified
+    };
+    res.json({ token, user: safeUser });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error during login' });
