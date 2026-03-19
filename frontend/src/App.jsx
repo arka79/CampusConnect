@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children, adminOnly }) => {
     <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0B1F3A' }}>
       <div style={{ textAlign: 'center' }}>
         <div className="spinner gold" style={{ width: 36, height: 36, margin: '0 auto 16px' }} />
-        <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>Loading Adamas University...</div>
+        <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>Loading Campus Connect...</div>
       </div>
     </div>
   )

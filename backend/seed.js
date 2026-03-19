@@ -41,7 +41,7 @@ async function seed() {
   const annId = uuidv4();
   await pool.query(
     "INSERT INTO announcements (id, title, content, priority, created_by) VALUES (?, ?, ?, 'high', ?)",
-    [annId, 'Welcome to Adamas University Platform!',
+    [annId, 'Welcome to Campus Connect Platform!',
      'This platform is your central hub for study materials, campus chat, and study groups. Upload your notes and collaborate with peers!',
      adminId]
   );

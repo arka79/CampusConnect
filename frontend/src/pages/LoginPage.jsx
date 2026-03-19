@@ -54,7 +54,7 @@ export default function LoginPage() {
           <div className="auth-hero-top">
             <div className="auth-hero-logo"><BookOpen size={24} color="#0B1F3A" /></div>
             <div>
-              <div className="auth-logo" style={{ fontSize: 22, margin: 0 }}>Adamas University</div>
+              <div className="auth-logo" style={{ fontSize: 22, margin: 0 }}>Campus Connect</div>
               <div style={{ color: 'var(--gold)', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Learning Platform</div>
             </div>
           </div>

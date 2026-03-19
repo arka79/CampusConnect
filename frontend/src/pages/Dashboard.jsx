@@ -49,7 +49,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="page-hero">
         <h1 className="page-title">{greeting}, {user?.name?.split(' ')[0]} 👋</h1>
-        <p className="page-subtitle">{user?.department} · {user?.year} · Adamas University</p>
+        <p className="page-subtitle">{user?.department} · {user?.year} · Campus Connect</p>
       </div>
 
       {/* Admin Stats */}

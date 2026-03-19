@@ -1,6 +1,6 @@
-# Adamas University Learning Platform
+# Campus Connect Learning Platform
 
-A full-stack web application for Adamas University students and faculty to share study materials, collaborate via real-time chat, and form study groups.
+A full-stack web application for Campus Connect students and faculty to share study materials, collaborate via real-time chat, and form study groups.
 
 ---
 
@@ -241,4 +241,4 @@ The entire UI uses a custom CSS design system with CSS variables defined in `ind
 
 ---
 
-*Built for Adamas University Mini Project — Full Stack Web Development*
+*Built for Campus Connect Mini Project — Full Stack Web Development*

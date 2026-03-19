@@ -66,7 +66,7 @@ export default function RegisterPage() {
           <div className="auth-hero-top">
             <div className="auth-hero-logo"><BookOpen size={24} color="#0B1F3A" /></div>
             <div>
-              <div style={{ fontFamily: 'Playfair Display', color: '#fff', fontSize: 20, fontWeight: 700 }}>Adamas University</div>
+              <div style={{ fontFamily: 'Playfair Display', color: '#fff', fontSize: 20, fontWeight: 700 }}>Campus Connect</div>
               <div style={{ color: 'var(--gold)', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Learning Platform</div>
             </div>
           </div>
