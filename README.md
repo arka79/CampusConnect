@@ -79,19 +79,13 @@ adamas/
 
 ### Prerequisites
 - Node.js 18+
-- MySQL 8.0+
+- PostgreSQL 17
 - Cloudinary account (free tier works)
 
 ---
 
-### 1. MySQL Database
-
-```sql
-CREATE DATABASE adamas_university CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-Tables are **auto-created** when the backend starts. No manual migration needed.
-
+### 1.  Database
+ use the postgreSql using Neon DB
 ---
 
 ### 2. Backend Setup
@@ -106,12 +100,7 @@ Edit `.env` with your credentials:
 
 ```env
 PORT=5000
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_NAME=adamas_university
-
+DATABASE_URI=Your-postgre-url-string-from-neondb
 JWT_SECRET=change_this_to_a_long_random_string
 JWT_EXPIRES_IN=7d
 
@@ -133,7 +122,7 @@ npm run dev        # development (nodemon)
 npm start          # production
 ```
 
-Backend runs at: `http://localhost:5000`
+Backend runs at: `http://localhost:5001`
 
 ---
 
@@ -147,7 +136,7 @@ npm run dev
 
 Frontend runs at: `http://localhost:5173`
 
-The Vite dev server proxies `/api` and `/socket.io` to `localhost:5000` automatically.
+The Vite dev server proxies `/api` and `/socket.io` to `localhost:5001` automatically.
 
 ---
 
