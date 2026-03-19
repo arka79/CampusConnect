@@ -10,7 +10,7 @@ A full-stack web application for Campus Connect students and faculty to share st
 |------------|-------------------------------------------------|
 | Frontend   | React 18, Vite, React Router v6, Socket.IO client |
 | Backend    | Node.js, Express.js                             |
-| Database   | MySQL 8+ (via mysql2)                           |
+| Database   | POSTRESQL 17 (via NEON DB)                           |
 | Real-time  | Socket.IO (WebSockets)                          |
 | File Storage | Cloudinary                                    |
 | Auth       | JWT (jsonwebtoken) + bcryptjs                   |
